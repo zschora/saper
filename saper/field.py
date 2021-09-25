@@ -1,13 +1,15 @@
 import random
 
 class field:
-    def __init__(self, n, bombs_number=random.randint(2, 5)):
+    def __init__(self, n = 5, bombs_number=random.randint(2, 5)):
         # -1 - бомаба
         self._field = [[0 for _ in range(n)] for _ in range(n)]
         self._game = [[0 for _ in range(n)] for _ in range(n)]
         self._not_open = n * n - bombs_number
         self._not_flagged = bombs_number
         self._losing = False
+        self._key = random.randint(1, 1000000)
+        self._n = n
         
         for i in range(bombs_number):
             i1 = random.randint(0, n - 1)
@@ -48,7 +50,6 @@ class field:
             self._not_flagged += 1
 
     def print(self):
-        print(self._not_flagged)
         for i1 in range(len(self._field)):
             for i2 in range(len(self._field)):
                 if self._game[i1][i2] == 0:
@@ -66,3 +67,60 @@ class field:
             return 'win'
         else:
             return 'not the end'
+
+    def save(self):
+        f = open('data', 'w')
+        
+        random.seed(self._key)
+        f.write(str(self._key) + ' ')
+        f.write(str(self._not_open + random.randint(0, 100)) + ' ')
+        f.write(str(self._not_flagged + random.randint(0, 100)) + ' ')
+        f.write(str(int(self._losing + random.randint(0, 100))) + ' ')
+        f.write(str(self._n + random.randint(0, 100)) + ' ')
+        f.write('\n')
+
+        for line in self._field:
+            for el in line:
+                f.write(str(el + random.randint(0, 100)) + ' ')
+            f.write('\n')
+
+        for line in self._game:
+            for el in line:
+                f.write(str(el + random.randint(0, 100)) + ' ')
+            f.write('\n')
+        f.close()
+
+    def load(self):
+        f = open('data', 'r')
+        
+        file = f.readlines()
+        f.close
+        val = list(map(int, file[0].split()))
+        self._key = int(val[0])
+
+        random.seed(self._key)
+        self._not_open = int(val[1]) - random.randint(0, 100)
+        self._not_flagged = int(val[2]) - random.randint(0, 100)
+        self._losing = int(val[3]) - random.randint(0, 100)
+        self._n = int(val[4]) - random.randint(0, 100)
+        
+        self._field = [[0 for _ in range(self._n)] for _ in range(self._n)]
+        self._game = [[0 for _ in range(self._n)] for _ in range(self._n)]
+
+        for i in range(self._n):
+            line = list(map(lambda x: int(x) - random.randint(0, 100), file[i+1].split()))
+            self._field[i] = line
+
+        for i in range(self._n):
+            line = list(map(lambda x: int(x) - random.randint(0, 100), file[self._n+i+1].split()))
+            self._game[i] = line
+
+    def print_info(self):
+        for line in self._field:
+            for el in line:
+                print(el, end = ' ')
+            print()
+        for line in self._game:
+            for el in line:
+                print(el, end = ' ')
+            print()
