@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>4c0554f0-43d9-4c7b-bb61-e92f51e54216</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>saper.py</StartupFile>
+    <StartupFile>ai_game.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -21,6 +21,12 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ai.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ai_game.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="field.py">
       <SubType>Code</SubType>
     </Compile>

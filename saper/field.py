@@ -38,6 +38,7 @@ class field:
             self._not_flagged -= 1 if self._game[i1][i2] == 2 else 0
             self._not_open -= 1
         self._game[i1][i2] = 1
+        return self._field[i1][i2]
 
     def get_bombs_num(self, i1, i2):
         return self._field[i1][i2]
