@@ -2,15 +2,18 @@ import random
 
 class field:
     def __init__(self, n = 5, bombs_number=random.randint(2, 5)):
-        # -1 - бомаба
+        
+        self._n = n
+        # поле с инфой о бомбах
         self._field = [[0 for _ in range(n)] for _ in range(n)]
+        # поле с инфой об игре (об открытых клетках)
         self._game = [[0 for _ in range(n)] for _ in range(n)]
         self._not_open = n * n - bombs_number
-        self._not_flagged = bombs_number
+        self._not_flagged = bombs_number # бомбы без флага + пустые клетки с флагами
         self._losing = False
         self._key = random.randint(1, 1000000)
-        self._n = n
         
+        # расставим случайно бомбы
         for i in range(bombs_number):
             i1 = random.randint(0, n - 1)
             i2 = random.randint(0, n - 1)
@@ -19,6 +22,7 @@ class field:
                 continue
             self._field[i1][i2] = -1
         
+        # подсчитаем кол-во бомб-соседей для пустых клеток
         deltas = ((0, 0), (0, 1), (0, -1), (1, 0), (1, 1), (1, -1), (-1, 0), (-1, 1), (-1, -1))
         for i1 in range(n):
             for i2 in range(n):
@@ -30,13 +34,14 @@ class field:
                             continue
                         self._field[i1 + d1][i2 + d2] += 1
 
-    def check(self, i1, i2):
+    def check(self, i1, i2): # ход, открытие клетки (i1, i2)
         current = self._field[i1][i2]
-        if current == -1:
+        if current == -1: # бомба, проигрыш
             self._losing = True
         else:
             self._not_flagged -= 1 if self._game[i1][i2] == 2 else 0
             self._not_open -= 1
+
         self._game[i1][i2] = 1
         return self._field[i1][i2]
 
@@ -115,13 +120,3 @@ class field:
         for i in range(self._n):
             line = list(map(lambda x: int(x) - random.randint(0, 100), file[self._n+i+1].split()))
             self._game[i] = line
-
-    def print_info(self):
-        for line in self._field:
-            for el in line:
-                print(el, end = ' ')
-            print()
-        for line in self._game:
-            for el in line:
-                print(el, end = ' ')
-            print()
